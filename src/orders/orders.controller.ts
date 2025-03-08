@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common';
 import { CreateOrderDto, OrderPaginationDto, UpdateOrderDto } from './dto';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { ORDERS_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 import { catchError, throwError } from 'rxjs';
 
 @Controller('orders')
 export class OrdersController {
   constructor(
-    @Inject(ORDERS_SERVICE) private readonly ordersClient: ClientProxy,
+    @Inject(NATS_SERVICE) private readonly ordersClient: ClientProxy,
   ) {}
 
   @Post()
@@ -27,7 +27,11 @@ export class OrdersController {
 
   @Get()
   findAll(@Query() paginationDto: OrderPaginationDto) {
-    return this.ordersClient.send('findAllOrders', paginationDto);
+    return this.ordersClient.send('findAllOrders', paginationDto).pipe(
+      catchError((error) => {
+        return throwError(() => new RpcException(error));
+      }),
+    );
   }
 
   @Get(':id')

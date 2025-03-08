@@ -13,12 +13,12 @@ import {
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { CreateProductDto, PaginationDto, UpdateProductDto } from 'src/common';
-import { PRODUCTS_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 
 @Controller('products')
 export class ProductsController {
   constructor(
-    @Inject(PRODUCTS_SERVICE) private readonly productClient: ClientProxy,
+    @Inject(NATS_SERVICE) private readonly productClient: ClientProxy,
   ) {}
 
   @Post()
