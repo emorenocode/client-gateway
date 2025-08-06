@@ -38,7 +38,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('verify')
-  verifyUser(@User() user: any, @Token() any) {
-    return this.client.send('auth.verify.user', {});
+  verifyUser(@User() user: any, @Token() token: string) {
+    return { user, token };
   }
 }
