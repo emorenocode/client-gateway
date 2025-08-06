@@ -11,7 +11,7 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package-lock.json .
 COPY . .
 RUN npm run build
-RUN npm ci --omit=dev
+RUN npm ci --only=production
 RUN npm cache clean --force
 
 # Create docker image
